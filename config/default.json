@@ -30,16 +30,16 @@
   },
   "mysql": {
     "client": "mysql2",
-    "connection": "mysql://root:@localhost:3306/qrapi"
+    "connection": "mysql://ktcz1875_mclaren:p3l3p4hkUn1ng@localhost:3306/ktcz1875_qrapi"
   },
   "dbqr": {
     "client": "mysql2",
     "connection": {
-      "host": "localhost",
+      "host": "203.175.8.105",
       "port": 3306,
-      "user": "root",
-      "password": "",
-      "database": "qrapi"
+      "user": "ktcz1875_mclaren",
+      "password": "p3l3p4hkUn1ng",
+      "database": "ktcz1875_qrapi"
     }
   }
 }
