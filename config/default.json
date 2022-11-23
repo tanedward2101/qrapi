@@ -30,7 +30,13 @@
   },
   "mysql": {
     "client": "mysql2",
-    "connection": "mysql://ktcz1875_mclaren:p3l3p4hkUn1ng@203.175.8.105:3306/ktcz1875_qrapi"
+    "connection": {
+      "host": "203.175.8.105",
+      "port": 3306,
+      "user": "ktcz1875_mclaren",
+      "password": "p3l3p4hkUn1ng",
+      "database": "ktcz1875_qrapi"
+    }
   },
   "dbqr": {
     "client": "mysql2",
