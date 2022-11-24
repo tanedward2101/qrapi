@@ -33,7 +33,8 @@ exports.Qrdb = class Qrdb {
           code: data.title.split("\n")[i],
           scanned: 0,
           fraud: 0,
-          created_date: new Date()
+          created_date: new Date(),
+          active:1
         }).catch(console.error)
       } catch (e) {
         console.log(e);
