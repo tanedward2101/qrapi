@@ -31,21 +31,21 @@
   "mysql": {
     "client": "mysql2",
     "connection": {
-      "host": "203.175.8.105",
+      "host": "localhost",
       "port": 3306,
-      "user": "ktcz1875_mclaren",
+      "user": "phpmyadmin",
       "password": "p3l3p4hkUn1ng",
-      "database": "ktcz1875_qrapi"
+      "database": "qrapi"
     }
   },
   "dbqr": {
     "client": "mysql2",
     "connection": {
-      "host": "203.175.8.105",
+      "host": "localhost",
       "port": 3306,
-      "user": "ktcz1875_mclaren",
+      "user": "phpmyadmin",
       "password": "p3l3p4hkUn1ng",
-      "database": "ktcz1875_qrapi"
+      "database": "qrapi"
     }
   }
 }
