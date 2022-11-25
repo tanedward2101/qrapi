@@ -6,14 +6,37 @@ exports.Qrdb = class Qrdb {
   }
 
   async find(params) {
+    var filter
+
     const dbQR = this.app.get('dbqr');
-    const data = await dbQR('qrdb').select('*')
-    //console.log(data);
+    var data
+
+    data = await dbQR('qrdb').select('*')
+    if (params.query.fraud) {
+      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud)
+    }
+
+    if (params.query.code && params.query.code['$like'] != '') {
+      filter = params.query.code['$like']
+      if (params.query.fraud) {
+        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud)
+      }
+      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`) }
+    }
+    if (params.query.tipe && params.query.tipe['$like'] != '') {
+      filter = params.query.tipe['$like']
+      if (params.query.fraud) {
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud)
+      }
+      else {
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`)
+      }
+    }
     return data;
   }
 
   async get(id, params) {
-    console.log(id)
+
     const dbQR = this.app.get('dbqr');
     const data = await dbQR('qrdb').select('*').where({ id: id })
     return data;
@@ -34,7 +57,7 @@ exports.Qrdb = class Qrdb {
           scanned: 0,
           fraud: 0,
           created_date: new Date(),
-          active:1
+          active: 1
         }).catch(console.error)
       } catch (e) {
         console.log(e);
