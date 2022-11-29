@@ -11,25 +11,25 @@ exports.Qrdb = class Qrdb {
     const dbQR = this.app.get('dbqr');
     var data
 
-    data = await dbQR('qrdb').select('*').where('active',1)
+    data = await dbQR('qrdb').select('*').where('active',1).orderBy('id', 'desc')
     if (params.query.fraud) {
-      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1)
+      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
     }
 
     if (params.query.code && params.query.code['$like'] != '') {
       filter = params.query.code['$like']
       if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1)
+        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
       }
-      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('active', 1) }
+      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc') }
     }
     if (params.query.tipe && params.query.tipe['$like'] != '') {
       filter = params.query.tipe['$like']
       if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1)
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
       }
       else {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('active', 1)
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc')
       }
     }
     return data;
