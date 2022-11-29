@@ -11,34 +11,33 @@ exports.Qrdb = class Qrdb {
     const dbQR = this.app.get('dbqr');
     var data
 
-    data = await dbQR('qrdb').select('*')
+    data = await dbQR('qrdb').select('*').where('active',1)
     if (params.query.fraud) {
-      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud)
+      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1)
     }
 
     if (params.query.code && params.query.code['$like'] != '') {
       filter = params.query.code['$like']
       if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud)
+        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1)
       }
-      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`) }
+      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('active', 1) }
     }
     if (params.query.tipe && params.query.tipe['$like'] != '') {
       filter = params.query.tipe['$like']
       if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud)
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1)
       }
       else {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`)
+        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('active', 1)
       }
     }
     return data;
   }
 
   async get(id, params) {
-
     const dbQR = this.app.get('dbqr');
-    const data = await dbQR('qrdb').select('*').where({ id: id })
+    const data = await dbQR('qrdb').select('*').where({ id: id }).andWhere('active', 1)
     return data;
   }
 
@@ -73,8 +72,8 @@ exports.Qrdb = class Qrdb {
 
   async update(id, data, params) {
     const dbQR = this.app.get('dbqr');
-    console.log(id)
-    console.log(data)
+   // console.log(id)
+   // console.log(data)
     await dbQR('qrdb').update({
       tipe: data.tipe,
       code: data.code,
@@ -84,10 +83,21 @@ exports.Qrdb = class Qrdb {
   }
 
   async patch(id, data, params) {
+    const dbQR = this.app.get('dbqr');
+    var idx = data.id
+   // console.log(idx)
+    for (var x = 0; x < idx.length; x++) {
+     // console.log(idx[x])
+      await dbQR('qrdb').update({
+        active: 0
+      }).where({ id: idx[x] })
+    }
     return "PATCH";
   }
 
   async remove(id, params) {
-    return { id };
+    const dbQR = this.app.get('dbqr');
+    await dbQR('qrdb').where({ id: id }).del()
+    return "Deleted"
   }
 };
