@@ -6,9 +6,9 @@ const https = require('https');
 const fs = require('fs');
 //const server = app.listen(port);
 const server = https.createServer({
-  key: fs.readFileSync('src/cert/ssl-cert-snakeoil.key'),
-  cert: fs.readFileSync('src/cert/ssl-cert-snakeoil.pem'),
-  ca: fs.readFileSync('src/cert/ssl-cert-snakeoil.pem')
+  key: fs.readFileSync('src/cert/private.key'),
+  cert: fs.readFileSync('src/cert/certificate.crt'),
+  ca: fs.readFileSync('src/cert/ca-bundle.crt')
 }, app).listen(port)
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
