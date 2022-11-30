@@ -5,7 +5,7 @@ const port = app.get('port');
 const https = require('https');
 //const server = app.listen(port);
 const server = https.createServer({
-  key: fs.readFileSync('./cert/ss-cert-snakeoil.key'),
+  key: fs.readFileSync('./cert/ssl-cert-snakeoil.key'),
   cert: fs.readFileSync('./cert/ssl-cert-snakeoil.pem')
 }, app).listen(port)
 process.on('unhandledRejection', (reason, p) =>
