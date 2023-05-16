@@ -20,7 +20,7 @@ class MyLocalStrategy extends LocalStrategy {
     }
     const result = await bcrypt.compare(decryptedPwd, entity.password);
     if (result) {
-      //console.log(entity)
+      
       return entity;
     } else {
       console.log(errorMessage)
