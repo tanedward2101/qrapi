@@ -9,29 +9,62 @@ exports.Qrdb = class Qrdb {
     var filter
 
     const dbQR = this.app.get('dbqr');
+   // console.log(params)
     var data
 
-    data = await dbQR('qrdb').select('*').where('active',1).orderBy('id', 'desc')
+    var sqlQuery = "SELECT * FROM qrdb WHERE 1=1 "
+    var sqlCount = "SELECT COUNT(id) as total FROM qrdb WHERE 1=1 "
+   // console.log(sqlQuery)
     if (params.query.fraud) {
-      data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
+      sqlQuery += "AND fraud='" + params.query.fraud + "' "
+      sqlCount += "AND fraud='" + params.query.fraud + "' "
+    }
+    if (params.query.code) {
+      filter = params.query.code['$like']
+      sqlQuery += "AND code LIKE '%" + filter + "%'  "
+      sqlCount  += "AND code LIKE '%" + filter + "%'  "
+    }
+    if (params.query.tipe) {
+      filter = params.query.tipe['$like']
+      sqlQuery += "AND tipe LIKE '%" + filter + "%'  "
+      sqlCount  += "AND tipe LIKE '%" + filter + "%'  "
     }
 
-    if (params.query.code && params.query.code['$like'] != '') {
-      filter = params.query.code['$like']
-      if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
-      }
-      else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc') }
+    sqlQuery += "AND active=1 order by id desc ";
+    sqlCount += "AND active=1  ";
+
+    if (params.query.limit) {
+      sqlQuery += "LIMIT " + params.query.limit + " "
     }
-    if (params.query.tipe && params.query.tipe['$like'] != '') {
-      filter = params.query.tipe['$like']
-      if (params.query.fraud) {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
-      }
-      else {
-        data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc')
-      }
+    if (params.query.offset) {
+      sqlQuery += "OFFSET " + params.query.offset + " "
     }
+    console.log(sqlQuery)
+    data = await dbQR.raw(sqlQuery);
+    var total=await dbQR.raw(sqlCount);
+    data[1]=total[0]
+   
+    // data = await dbQR('qrdb').select('*').where('active', 1).orderBy('id', 'desc')
+    // if (params.query.fraud) {
+    //   data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
+    // }
+
+    // if (params.query.code && params.query.code['$like'] != '') {
+    //   filter = params.query.code['$like']
+    //   if (params.query.fraud) {
+    //     data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
+    //   }
+    //   else { data = await dbQR('qrdb').select('*').where('code', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc') }
+    // }
+    // if (params.query.tipe && params.query.tipe['$like'] != '') {
+    //   filter = params.query.tipe['$like']
+    //   if (params.query.fraud) {
+    //     data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
+    //   }
+    //   else {
+    //     data = await dbQR('qrdb').select('*').where('tipe', 'like', `%${filter}%`).andWhere('active', 1).orderBy('id', 'desc')
+    //   }
+    // }
     return data;
   }
 
@@ -72,8 +105,8 @@ exports.Qrdb = class Qrdb {
 
   async update(id, data, params) {
     const dbQR = this.app.get('dbqr');
-   // console.log(id)
-   // console.log(data)
+    // console.log(id)
+    // console.log(data)
     await dbQR('qrdb').update({
       tipe: data.tipe,
       code: data.code,
@@ -85,9 +118,9 @@ exports.Qrdb = class Qrdb {
   async patch(id, data, params) {
     const dbQR = this.app.get('dbqr');
     var idx = data.id
-   // console.log(idx)
+    // console.log(idx)
     for (var x = 0; x < idx.length; x++) {
-     // console.log(idx[x])
+      // console.log(idx[x])
       await dbQR('qrdb').update({
         active: 0
       }).where({ id: idx[x] })

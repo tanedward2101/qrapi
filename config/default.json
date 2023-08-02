@@ -33,8 +33,8 @@
     "connection": {
       "host": "localhost",
       "port": 3306,
-      "user": "phpmyadmin",
-      "password": "bakso123",
+      "user": "root",
+      "password": "",
       "database": "qrapi"
     }
   },
@@ -43,8 +43,8 @@
     "connection": {
       "host": "localhost",
       "port": 3306,
-      "user": "phpmyadmin",
-      "password": "bakso123",
+      "user": "root",
+      "password": "",
       "database": "qrapi"
     }
   }
