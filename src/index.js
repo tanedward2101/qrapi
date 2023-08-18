@@ -7,7 +7,8 @@ const fs = require('fs');
 //const server = app.listen(port);
 const server = https.createServer({
   key: fs.readFileSync('src/cert/private.key'),
-  cert: fs.readFileSync('src/cert/certificate.crt')
+  cert: fs.readFileSync('src/cert/certificate.crt'),
+  ca: fs.readFileSync('src/cert/ca_bundle.crt')
 }, app).listen(port)
 
 process.on('unhandledRejection', (reason, p) =>
