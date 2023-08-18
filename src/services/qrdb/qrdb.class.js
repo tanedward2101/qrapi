@@ -45,10 +45,11 @@ exports.Qrdb = class Qrdb {
     if (params.query.offset) {
       sqlQuery += "OFFSET " + params.query.offset + " "
     }
-    // console.log(sqlQuery)
+    console.log(sqlQuery)
     data = await dbQR.raw(sqlQuery);
     var total = await dbQR.raw(sqlCount);
-    var verified = await dbQR.raw(sqlVerified)
+    var verified = await dbQR.raw(sqlVerified);
+    console.log("DATA DONE")
     data[1] = total[0]
     data[2] = verified[0]
     // data = await dbQR('qrdb').select('*').where('active', 1).orderBy('id', 'desc')
