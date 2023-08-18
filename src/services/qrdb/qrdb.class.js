@@ -9,29 +9,35 @@ exports.Qrdb = class Qrdb {
     var filter
 
     const dbQR = this.app.get('dbqr');
-   // console.log(params)
+    // console.log(params)
     var data
 
     var sqlQuery = "SELECT * FROM qrdb WHERE 1=1 "
     var sqlCount = "SELECT COUNT(id) as total FROM qrdb WHERE 1=1 "
-   // console.log(sqlQuery)
+    var sqlVerified = "SELECT COUNT(id) as verified FROM qrdb WHERE scanned>=1 "
+    // console.log(sqlQuery)
     if (params.query.fraud) {
       sqlQuery += "AND fraud='" + params.query.fraud + "' "
       sqlCount += "AND fraud='" + params.query.fraud + "' "
+      sqlVerified += "AND fraud='" + params.query.fraud + "' "
     }
     if (params.query.code) {
       filter = params.query.code['$like']
       sqlQuery += "AND code LIKE '%" + filter + "%'  "
-      sqlCount  += "AND code LIKE '%" + filter + "%'  "
+      sqlCount += "AND code LIKE '%" + filter + "%'  "
+      sqlVerified += "AND code LIKE '%" + filter + "%'  "
     }
     if (params.query.tipe) {
       filter = params.query.tipe['$like']
       sqlQuery += "AND tipe LIKE '%" + filter + "%'  "
-      sqlCount  += "AND tipe LIKE '%" + filter + "%'  "
+      sqlCount += "AND tipe LIKE '%" + filter + "%'  "
+      sqlVerified += "AND tipe LIKE '%" + filter + "%'  "
     }
 
     sqlQuery += "AND active=1 order by id desc ";
     sqlCount += "AND active=1  ";
+    sqlVerified += "AND active=1  ";
+
 
     if (params.query.limit) {
       sqlQuery += "LIMIT " + params.query.limit + " "
@@ -39,11 +45,12 @@ exports.Qrdb = class Qrdb {
     if (params.query.offset) {
       sqlQuery += "OFFSET " + params.query.offset + " "
     }
-    console.log(sqlQuery)
+    // console.log(sqlQuery)
     data = await dbQR.raw(sqlQuery);
-    var total=await dbQR.raw(sqlCount);
-    data[1]=total[0]
-   
+    var total = await dbQR.raw(sqlCount);
+    var verified = await dbQR.raw(sqlVerified)
+    data[1] = total[0]
+    data[2] = verified[0]
     // data = await dbQR('qrdb').select('*').where('active', 1).orderBy('id', 'desc')
     // if (params.query.fraud) {
     //   data = await dbQR('qrdb').select('*').where('fraud', params.query.fraud).andWhere('active', 1).orderBy('id', 'desc')
